@@ -5,9 +5,9 @@ import os
 import csv
 
 #define variables to store values in
-months = 0
-net_profit = float(0.0)
-average_change = 0
+net_profit = 0.0
+average_change_list = []
+average_change = float(0.0)
 greatest_increase = 0
 greatest_decrease = 0
 thismonth = 0
@@ -33,15 +33,17 @@ with open(bdata_csv, newline='') as csvfile:
 
      
     for row in csvreader:
-        
-        #count the months 1/row
-        months = months + 1
         #record the total of all values in profits/losses
         net_profit = net_profit + int(row[1])
         #update thismonth
         thismonth = int(row[1])
-        #calculate current_change
-        current_change = lastmonth-thismonth
+        #calculate current_change, if statement to deal with subtracting negative numbers
+        current_change = thismonth-lastmonth
+        if thismonth<0 and lastmonth<0:
+            current_change = thismonth+lastmonth
+        #add current_change value to list to calculate average later, if statement for the first iteration (85 differences between 86 consecutive numbers)
+        if lastmonth != 0:
+            average_change_list.append(current_change)
         #check if the change between lastmonth and thismonth is the biggest gain yet
         if current_change>0 and current_change>greatest_increase:
             greatest_increase = current_change
@@ -54,14 +56,15 @@ with open(bdata_csv, newline='') as csvfile:
         #update lastmonth
         lastmonth = int(row[1])
 
+    average_change = sum(average_change_list)/len(average_change_list)
 
-
-    print(months)
-    print (net_profit)
-    print(date1)
-    print(greatest_increase)
-    print(date2)
-    print(greatest_decrease)
+    print('Total Months: ' + str(len(average_change_list)+1))
+    print('Total: ' + str(net_profit))
+    print('Greatest increase in profits: ' + date1 + str(greatest_increase))
+    print('Greatest decrease in profits: ' + date2 + str(greatest_decrease)
+    #print(sum(average_change_list))
+    print(average_change)
+    #print(average_change_list)
 
 
    
