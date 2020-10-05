@@ -22,15 +22,8 @@ bdata_csv = os.path.join('Resources', 'budget_data.csv')
 with open(bdata_csv, newline='') as csvfile:
     # CSV reader specifies delimiter and variable that holds contents
     csvreader = csv.reader(csvfile, delimiter=',')
-    
     #remove header
     header = next(csvfile)
-    #print(header)
-    
-    #calculate total amount of profit/loss by using sum on the second row
-    #net_profit = sum(int(r[1]) for r in csvreader)
-    #print (net_profit)
-
      
     for row in csvreader:
         #record the total of all values in profits/losses
@@ -41,7 +34,7 @@ with open(bdata_csv, newline='') as csvfile:
         current_change = thismonth-lastmonth
         if thismonth<0 and lastmonth<0:
             current_change = thismonth+lastmonth
-        #add current_change value to list to calculate average later, if statement for the first iteration (85 differences between 86 consecutive numbers)
+        #add current_change value to list to calculate average later, if statement for the first iteration (85 differences between 86 numbers)
         if lastmonth != 0:
             average_change_list.append(current_change)
         #check if the change between lastmonth and thismonth is the biggest gain yet
@@ -52,18 +45,21 @@ with open(bdata_csv, newline='') as csvfile:
         elif current_change<0 and current_change<greatest_decrease:
             greatest_decrease = current_change
             date2 = row[0]
-
         #update lastmonth
         lastmonth = int(row[1])
+        
 
     average_change = sum(average_change_list)/len(average_change_list)
-
+    print(' ')
+    print('Financial Analysis')
+    print('--------------------------------------------')
     print('Total Months: ' + str(len(average_change_list)+1))
     print('Total: ' + str(net_profit))
-    print('Greatest increase in profits: ' + date1 + str(greatest_increase))
-    print('Greatest decrease in profits: ' + date2 + str(greatest_decrease)
+    print('Average change: ' + str(round(average_change, 2)))
+    print('Greatest increase in profits: ' + date1 + ' ' + str(greatest_increase))
+    print('Greatest decrease in profits: ' + date2 + ' ' + str(greatest_decrease))
+    print(' ')
     #print(sum(average_change_list))
-    print(average_change)
     #print(average_change_list)
 
 
